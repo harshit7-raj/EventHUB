@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="EventHub - discover, explore and register for upcoming events." />
+  <title>EventHub | Discover &amp; Register for Events</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="#home" class="brand">Event<span>Hub</span></a>
+
+      <nav class="nav-links" id="navLinks" aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#events">Events</a>
+        <a href="#registrations">My Registrations <span class="badge" id="regBadge">0</span></a>
+      </nav>
+
+      <div class="nav-actions">
+        <button class="icon-btn" id="themeToggle" aria-label="Toggle dark / light mode">🌙</button>
+        <button class="icon-btn menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO ============ -->
+    <section class="hero" id="home">
+      <div class="hero-bg"></div>
+      <div class="container hero-content">
+        <span class="pill">🎉 Your next experience starts here</span>
+        <h1>Discover events that <span class="gradient-text">inspire you</span></h1>
+        <p>Browse hackathons, concerts, workshops and more. Find what you love, register in seconds and never miss out.</p>
+        <div class="hero-buttons">
+          <a href="#events" class="btn btn-primary">Explore Events</a>
+          <a href="#registrations" class="btn btn-ghost">My Registrations</a>
+        </div>
+
+        <div class="hero-countdown" id="heroCountdown">
+          <p class="hc-label">Next up: <strong id="heroEventName">Loading...</strong></p>
+          <div class="countdown" id="heroTimer"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ STATS ============ -->
+    <section class="stats container">
+      <div class="stat"><h3 id="statEvents">0</h3><p>Upcoming Events</p></div>
+      <div class="stat"><h3 id="statCats">0</h3><p>Categories</p></div>
+      <div class="stat"><h3 id="statRegs">0</h3><p>Your Registrations</p></div>
+    </section>
+
+    <!-- ============ EVENTS ============ -->
+    <section class="section container" id="events">
+      <div class="section-head reveal">
+        <h2>Upcoming &amp; Featured Events</h2>
+        <p>Search, filter and pick the event that fits you.</p>
+      </div>
+
+      <div class="toolbar reveal">
+        <div class="search-box">
+          <span aria-hidden="true">🔍</span>
+          <input type="search" id="searchInput" placeholder="Search events by name, venue or keyword..." aria-label="Search events" />
+        </div>
+        <select id="sortSelect" aria-label="Sort events">
+          <option value="date">Sort: Soonest first</option>
+          <option value="name">Sort: Name (A-Z)</option>
+          <option value="price">Sort: Price (low to high)</option>
+        </select>
+      </div>
+
+      <div class="chips reveal" id="categoryChips" role="tablist" aria-label="Filter by category"></div>
+
+      <div class="grid" id="eventGrid"></div>
+
+      <div class="empty" id="emptyState" hidden>
+        <div class="empty-icon">🕵️</div>
+        <h3>No events found</h3>
+        <p>Try a different keyword or category.</p>
+        <button class="btn btn-primary" id="resetFilters">Reset filters</button>
+      </div>
+    </section>
+
+    <!-- ============ REGISTRATIONS ============ -->
+    <section class="section container" id="registrations">
+      <div class="section-head reveal">
+        <h2>My Registrations</h2>
+        <p>Saved in your browser using Local Storage.</p>
+      </div>
+      <div class="reg-list" id="regList"></div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      <p><strong>EventHub</strong> &middot; Built with HTML5, CSS3 &amp; JavaScript</p>
+      <p class="muted">&copy; <span id="year"></span> EventHub. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- ============ EVENT DETAIL + REGISTRATION MODAL ============ -->
+  <div class="modal-overlay" id="modal" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+
+      <div id="modalView">
+        <div class="modal-image" id="modalImage"></div>
+        <div class="modal-body">
+          <span class="tag" id="modalCategory"></span>
+          <h2 id="modalTitle"></h2>
+
+          <ul class="meta-list">
+            <li>📅 <span id="modalDate"></span></li>
+            <li>📍 <span id="modalVenue"></span></li>
+            <li>💰 <span id="modalPrice"></span></li>
+            <li>🎟️ <span id="modalSeats"></span></li>
+          </ul>
+
+          <p class="modal-desc" id="modalDesc"></p>
+
+          <div class="countdown small" id="modalTimer"></div>
+
+          <hr />
+          <h3>Register for this event</h3>
+
+          <form id="regForm" novalidate>
+            <div class="field">
+              <label for="fullName">Full Name</label>
+              <input type="text" id="fullName" placeholder="e.g. Aarav Sharma" autocomplete="name" />
+              <small class="error" id="nameError"></small>
+            </div>
+
+            <div class="field">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" placeholder="you@example.com" autocomplete="email" />
+              <small class="error" id="emailError"></small>
+            </div>
+
+            <div class="field">
+              <label for="phone">Phone Number</label>
+              <input type="tel" id="phone" placeholder="10-digit mobile number" maxlength="10" inputmode="numeric" autocomplete="tel" />
+              <small class="error" id="phoneError"></small>
+            </div>
+
+            <div class="field">
+              <label for="eventSelect">Selected Event</label>
+              <select id="eventSelect"></select>
+              <small class="error" id="eventError"></small>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block">Confirm Registration</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Success view -->
+      <div class="success" id="successView" hidden>
+        <div class="check">✓</div>
+        <h2>Registration Confirmed!</h2>
+        <p id="successMsg"></p>
+        <div class="ticket" id="ticket"></div>
+        <button class="btn btn-primary" id="successClose">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
