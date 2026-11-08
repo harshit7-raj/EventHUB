@@ -2,8 +2,8 @@
 
 A modern, fully responsive event management website where users can browse upcoming events, search and filter them, view detailed information and register through a validated form.
 
-**Live Demo:** `<add your Vercel / Netlify / GitHub Pages link here>`
-**GitHub Repository:** `<add your repository link here>`
+**Live Demo:** `<https://harshit7-raj.github.io/EventHUB/
+**GitHub Repository:** https://github.com/harshit7-raj/EventHUB
 
 ## Features
 
